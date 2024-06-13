@@ -8,19 +8,19 @@ MobiusDevice.h - Line 58 - The "expectedCount" = area
   
 
 ## Instructions (What i used with code working as-is)
-STEP-1: Install Arduino IDE v2.3.2 (Windows\Mac\Linux): https://www.arduino.cc/en/software or https://github.com/arduino/arduino-ide/releases/tag/2.3.2
+**STEP-1:** Install Arduino IDE v2.3.2 (Windows\Mac\Linux): https://www.arduino.cc/en/software or https://github.com/arduino/arduino-ide/releases/tag/2.3.2
 
-STEP-2: Install USB Driver for ESP32 Boards (Windows\Mac\Linux): https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads - On Windows - Download the "CP210x Universal Windows Driver" zip file, Extract and then browse the extracted directory, right-click on silabser.inf and select install and follow any prompts. Then connect your ESP32 Device to your USB Port on your computer... Should appear in your Device Manager as a COM Port...
+**STEP-2:** Install USB Driver for ESP32 Boards (Windows\Mac\Linux): https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads - On Windows - Download the "CP210x Universal Windows Driver" zip file, Extract and then browse the extracted directory, right-click on silabser.inf and select install and follow any prompts. Then connect your ESP32 Device to your USB Port on your computer... Should appear in your Device Manager as a COM Port...
 
-STEP-3: Run Arduino IDE and go to File > Preferences - Down the bottom where it says "Additional boards manager URLs:" add: https://espressif.github.io/arduino-esp32/package_esp32_index.json and then click on OK. You may get a pop-up saying "Downloading index: package_esp32_index.json" - Wait for this to finish (the popup will disappear on its own), if doesn't appear, close and reopen the Arduino IDE Software to refresh. 
+**STEP-3:** Run Arduino IDE and go to File > Preferences - Down the bottom where it says "Additional boards manager URLs:" add: https://espressif.github.io/arduino-esp32/package_esp32_index.json and then click on OK. You may get a pop-up saying "Downloading index: package_esp32_index.json" - Wait for this to finish (the popup will disappear on its own), if doesn't appear, close and reopen the Arduino IDE Software to refresh. 
 
-STEP-4: In Arduino IDE, Go to Tools > Board > Boards Manager - For Type - Select All and then in the "Filter your search" section type in esp32. You should see "esp32 by Expressif Systems" - Choose from the version drop-down list v2.0.17 and click on INSTALL - THIS IS IMPORTANT as this code has issues compiling with v3.0/3.0.1 or higher.
+**STEP-4:** In Arduino IDE, Go to Tools > Board > Boards Manager - For Type - Select All and then in the "Filter your search" section type in esp32. You should see "esp32 by Expressif Systems" - Choose from the version drop-down list v2.0.17 and click on INSTALL - THIS IS IMPORTANT as this code has issues compiling with v3.0/3.0.1 or higher.
 
-STEP-5: Copy the libraries from inside the MobiusControl\Libraries directory into your Documents\Arduino\Libraries directory - (If you are on a WINDOWS PC) or wherever the equivalent is on a Mac/Linux...
+**STEP-5:** Copy the libraries from inside the MobiusControl\Libraries directory into your Documents\Arduino\Libraries directory - (If you are on a WINDOWS PC) or wherever the equivalent is on a Mac/Linux...
 
-STEP-6: Copy the MobiusControl.ino file to Documents\Arduino directory - (If you are on a WINDOWS PC) or wherever the equivalent is on a Mac/Linux...
+**STEP-6:** Copy the MobiusControl.ino file to Documents\Arduino directory - (If you are on a WINDOWS PC) or wherever the equivalent is on a Mac/Linux...
 
-STEP-7: Edit the following lines of MobiusControl.ino code in Arduino IDE with your values - Lines: 10 / 11 / 12 / 13 / 14 / 15 / 16 & 107
+**STEP-7:** Edit the following lines of MobiusControl.ino code in Arduino IDE with your values - Lines: 10 / 11 / 12 / 13 / 14 / 15 / 16 & 107
 
 
 ## NOTES: 
