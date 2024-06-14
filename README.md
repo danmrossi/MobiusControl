@@ -6,6 +6,8 @@ Control *2x Ecotech Marine MOBIUS BLE Devices to enable "Feed Mode" - Code has b
 *Optimised the code in the ESP32_MobiusBLE Library to Connect to 2 devices reliably, I modified these two files in "ESP32_MobiusBLE\src\" - MobiusDevice.cpp and MobiusDevice.h - MobiusDevice.cpp - Line 462/463 and MobiusDevice.h - Line 58 - The "expectedCount" = area.
 
 
+This code should work with other "Mobius" enabled devices but you will have to play with the code to suit. What i am providing is everything i used to get it to do WHAT I WANT and to give you a decent starting point which is more than i had lol :P 
+
 ***NOTES:***
 
 
