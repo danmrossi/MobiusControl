@@ -27,7 +27,7 @@ MobiusControl-v2.ino - "The Sketch i am using myself" - Connects to 2 devices (O
 
 ***STEP-4:*** In Arduino IDE, Go to Tools > Board > Boards Manager - For Type - Select All and then in the "Filter your search" section type in esp32. You should see "esp32 by Expressif Systems" - Choose from the version drop-down list v2.0.17 and click on INSTALL - THIS IS IMPORTANT as this code has issues compiling with v3.0/3.0.1 or higher.
 
-***STEP-5:*** Copy the libraries from inside the MobiusControl\Libraries directory into your Documents\Arduino\Libraries directory - (If you are on a WINDOWS PC) or wherever the equivalent is on a Mac/Linux...
+***STEP-5:*** Extract Libraries.zip contents into your Documents\Arduino\Libraries directory - (If you are on a WINDOWS PC) or wherever the equivalent is on a Mac/Linux... **NOTE:** Replace the ArduinoJson folder in Libraries.zip contents with the one from ArduinoJson(Original-Unmodified).zip if using the sketch as is. If you have an issue compiling due to ArduinoJson.h saying it is "missing" - Try moving the #include <ArduinoJson.h> line further up the list and run a Verify/Compile each time and move up again until it works. I quickly got frustrated and gave up so ended up editing all the files inside of ArduinoJson folder (The current ArduinoJson folder in Libraries.zip). To modify the files to suit your location - find/replace on each file - Replace C:\Users\Daniel Rossi\Documents\Arduino\libraries\ with your equivalent on all files that find/replace finds C:\Users\Daniel Rossi\Documents\Arduino\libraries\ ... If you do go down the rabbit hole of modifying all the ArduinoJson files then change the code in the Sketch from #include <ArduinoJson.h> to (for example) #include "C:\\Users\\Daniel Rossi\\Documents\\Arduino\\libraries\\ArduinoJson\\ArduinoJson.h"
 
 ***STEP-6:*** Copy the MobiusControl.ino file to Documents\Arduino directory - (If you are on a WINDOWS PC) or wherever the equivalent is on a Mac/Linux...
 
@@ -37,17 +37,14 @@ MobiusControl-v2.ino - "The Sketch i am using myself" - Connects to 2 devices (O
 ***TROUBLESHOOTING:*** 
 
 
-If you are having random issues with Bluetooth connectivity, Set the 2.4ghz WiFi Channel on your Router to Channel 1. This prevents any WiFi Channel overlap with the ESP Bluetooth module signals. 
+If you are having random issues with Bluetooth connectivity, Set the 2.4ghz WiFi Channel on your Router to Channel 1. This prevents any WiFi Channel overlap with the Mobius Device / ESP32 Bluetooth module signals. 
 
-Whenever you open the Arduino IDE app it will ask to update libraries etc. DO NOT UPDATE unless you want to potentially bugfix code due to new bugs/function changes etc. You can google how to disable auto updates in Arduino IDE etc...
+Whenever you open the Arduino IDE app it will ask to update libraries etc. **DO NOT UPDATE** unless you want to potentially bugfix code due to new bugs/function changes etc. You can google how to disable auto updates in Arduino IDE etc...
 
 If modifying Arduino Library files, do so with Arduino IDE software closed and then before opening the Arduino IDE software again, clear out your C:\Windows\Temp and C:\Users\Your Username\AppData\Local\Temp directory as on Windows machines anyway, thats where all the Arduino temp files are located and we want to make sure that a rebuild of the libraries is enforced so you know 100% your changes applied and were ok.
 
-If you have an issue compiling due to ArduinoJson.h saying it is "missing" - Try moving the #include <ArduinoJson.h> line further up the list and run a Verify/Compile. 
-
-I quickly got frustrated and gave up so ended up editing all the files inside of ArdinoJson folder. See **ArduinoJson(Modified).zip**
-
-Extract and then run through a find/replace on each file - Replace C:\Users\Daniel Rossi\Documents\Arduino\libraries\ with your equivalent on all files that find/replace finds C:\Users\Daniel Rossi\Documents\Arduino\libraries\ ... If you do go down the rabbit hole of modifying ArduinoJson.h files then change the code in the Sketch from #include <ArduinoJson.h> to (for example) #include "C:\\Users\\Daniel Rossi\\Documents\\Arduino\\libraries\\ArduinoJson\\ArduinoJson.h"
 
 
-***All code in the Libraries directory is not mine, See the relevant Readme/Licence files in each directory for more information. I simply compiled together my code (MobiusControl-v1.ino & Mobiuscontrol-v2.ino) with the libraries that worked with the hope that more people will have success with this project/hobby and hopefully build upon this and use this GitHub repo as a common base moving forward as when i started looking at this, files, code etc was either all over the place, based on a myriad of technologies, half-finished or parts non existent..***  
+
+
+***All code in the Libraries directory is not mine, See the relevant Readme/Licence files located within each directory for more information. I simply compiled together my code (MobiusControl-v1.ino & Mobiuscontrol-v2.ino) with the libraries that worked with the hope that more people will have success with this project/hobby and hopefully build upon this and use this GitHub repo as a common base moving forward as when i started looking at this, files, code etc was either all over the place, based on a myriad of technologies, half-finished or parts non existent..***  
