@@ -3,8 +3,7 @@ Control *2x Ecotech Marine MOBIUS BLE Devices to enable "Feed Mode" - Code has b
 
 *Optimised the code in the ESP32_MobiusBLE Library to Connect to 2 devices reliably, I modified these two files in "ESP32_MobiusBLE\src\" - MobiusDevice.cpp and MobiusDevice.h
 
-MobiusDevice.cpp - Line 462/463
-MobiusDevice.h - Line 58 - The "expectedCount" = area
+MobiusDevice.cpp - Line 462/463 and MobiusDevice.h - Line 58 - The "expectedCount" = area
 
 ***NOTE:*** All code in the Libraries directory is not mine, See the relevant Readme/Licence files in each directory for more information. I simply compiled together my code (MobiusControl.ino) with the libraries that worked with the hope that more people will have success with this project/hobby and hopefully build upon this and use this GitHub repo as a common base moving forward as when i started looking at this, files, code etc was either all over the place, based on a myriad of technologies, half-finished or non existent..  
 
