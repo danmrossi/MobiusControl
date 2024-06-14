@@ -2,12 +2,13 @@
 #include "ArduinoSerialDeviceEventListener.h"
 #include "EspMQTTClient.h"
 #include <WiFi.h>
+#include <esp_bt.h>
 #include <string>
 #include <ArduinoJson.h>
 
 // MQTT client object with parameters for WiFi and MQTT broker
 EspMQTTClient client(
-  "EnterYourWifiSSIDHere",
+  "EnterYourWiFiSSIDHere",
   "EnterYourWiFiPasswordHere",
   "homeassistant.local",
   "MQTTBrokerUsername",
@@ -17,7 +18,7 @@ EspMQTTClient client(
 );
 
 // JSON discovery messages for Home Assistant
-char* jsonSwitchDiscovery =  R"json({
+const char* jsonSwitchDiscovery =  R"json({
     "name":"Feed Mode",
     "command_topic":"homeassistant/switch/mb/set",
     "state_topic":"homeassistant/switch/mb/state",
@@ -30,7 +31,7 @@ char* jsonSwitchDiscovery =  R"json({
     }
 })json";
 
-char* jsonSensorDiscovery =  R"json({
+const char* jsonSensorDiscovery =  R"json({
     "name":"QTY Devices",
     "state_topic":"homeassistant/sensor/mb/state",
     "value_template":"{{ value_json.qtydevices}}",
@@ -42,7 +43,7 @@ char* jsonSensorDiscovery =  R"json({
     }
 })json";
 
-char* jsonStatusDiscovery =  R"json({
+const char* jsonStatusDiscovery =  R"json({
     "name":"FM Status",
     "state_topic":"homeassistant/sensor/mb/status",
     "unique_id":"fmst",
@@ -53,7 +54,7 @@ char* jsonStatusDiscovery =  R"json({
     }
 })json";
 
-char* jsonTimerDiscovery =  R"json({
+const char* jsonTimerDiscovery =  R"json({
     "name":"FM Timer",
     "state_topic":"homeassistant/sensor/mb/timer",
     "unique_id":"fmtimer",
@@ -93,8 +94,7 @@ unsigned long lastReconnectAttempt = 0;
 const unsigned long reconnectInterval = 10000; // 10 seconds reconnect interval
 
 // Callback function when MQTT connection is established
-void onConnectionEstablished()
-{
+void onConnectionEstablished() {
   Serial.println("CONNECTED TO MQTT BROKER");
   client.subscribe("homeassistant/switch/mb/set", [](const String& feedMode) {
     if (feedMode.length() > 0) {
@@ -122,11 +122,17 @@ void onConnectionEstablished()
 void ensureWiFiConnected() {
   if (WiFi.status() != WL_CONNECTED) {
     WiFi.begin("EnterYourWiFiSSIDHere", "EnterYourWiFiPasswordHere");
-    while (WiFi.status() != WL_CONNECTED) {
+    WiFi.setSleep(true); // Enable WiFi modem sleep
+    unsigned long startAttemptTime = millis();
+    while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < 10000) {
       delay(500);
       Serial.print(".");
     }
-    Serial.println("WiFi reconnected");
+    if (WiFi.status() == WL_CONNECTED) {
+      Serial.println("WiFi reconnected");
+    } else {
+      Serial.println("WiFi reconnection failed");
+    }
   }
 }
 
@@ -147,6 +153,19 @@ void ensureMQTTConnected() {
   }
 }
 
+// Ensure Bluetooth is initialized
+void ensureBluetoothInitialized() {
+  static int bluetoothInitRetries = 0;
+  const int maxRetries = 3;
+  if (deviceCount == 0 && bluetoothInitRetries < maxRetries) {
+    bluetoothInitRetries++;
+    Serial.println("Reinitializing Bluetooth...");
+    MobiusDevice::init(new ArduinoSerialDeviceEventListener());
+  } else {
+    bluetoothInitRetries = 0; // Reset retry counter if devices are found
+  }
+}
+
 // Scan for devices with a retry mechanism
 void scanForDevices() {
   int retries = 3;
@@ -158,6 +177,7 @@ void scanForDevices() {
     delay(1000);
   }
   Serial.printf("INFO: MOBIUS BLE DEVICES FOUND: %i\n", deviceCount);
+  ensureBluetoothInitialized(); // Reinitialize Bluetooth if no devices found
 }
 
 // Publish configuration messages to MQTT
@@ -181,7 +201,9 @@ void publishConfigs() {
 bool updateDeviceState(MobiusDevice& device) {
   const int maxRetries = 3;
   for (int i = 0; i < maxRetries; i++) {
+    Serial.println("Starting connection to the device");
     if (device.connect()) {
+      Serial.println("Successfully connected to the device");
       uint16_t sceneId = device.getCurrentScene();
       Serial.printf("INFO: SCENE ID FOR DEVICE: %u\n", sceneId);
 
@@ -192,6 +214,7 @@ bool updateDeviceState(MobiusDevice& device) {
       }
 
       device.disconnect();
+      Serial.println("Successfully disconnected from the device");
       return true;
     } else {
       Serial.printf("ERROR: FAILED TO CONNECT TO DEVICE (Try %i)\n", i);
@@ -224,6 +247,8 @@ void setup() {
 
   client.setMaxPacketSize(2048);  // Adjust size as needed
   client.setKeepAlive(60);  // 60 seconds keep-alive interval
+
+  esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT); // Release classic BT memory to reduce RAM usage
 
   MobiusDevice::init(new ArduinoSerialDeviceEventListener());
   Serial.println("SETUP RUN");
