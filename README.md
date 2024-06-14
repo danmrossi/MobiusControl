@@ -21,7 +21,7 @@ MobiusDevice.h - Line 58 - The "expectedCount" = area
 
 ***STEP-6:*** Copy the MobiusControl.ino file to Documents\Arduino directory - (If you are on a WINDOWS PC) or wherever the equivalent is on a Mac/Linux...
 
-***STEP-7:*** Edit the following lines of MobiusControl.ino code in Arduino IDE with your values - Lines: 10 / 11 / 12 / 13 / 14 / 15 / 16 & 107
+***STEP-7:*** For MobiusControl-v1.ino - Edit the following lines in Arduino IDE with your values - Lines: 10 / 11 / 12 / 13 / 14 / 15 / 16 & 107 - For MobiusControl-v2.ino - Edit the following lines in Arduino IDE with your values - Lines: 10 / 11 / 12 / 13 / 14 / 15 / 16 & 124
 
 
 ## NOTES: 
