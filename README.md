@@ -43,6 +43,8 @@ To modify the files to suit your location - find/replace on each file - Replace 
 
 If you are having random issues with Bluetooth connectivity, Set the 2.4ghz WiFi Channel on your Router to Channel 1. This prevents any WiFi Channel overlap with the Mobius Device / ESP32 Bluetooth module signals. 
 
+To make sure that WiFi connectivity is also constant with ESP32 devices, i find that if you set your DHCP Range in your Router to be smaller for example - Set it to hand out IP Addresses to all your devices between 192.168.1.50 - 192.168.1.100 (or whatever your 192.168. range is) and then also in your Router set your ESP32 device with a Static IP of an Address outside of this DHCP Range for example 192.168.1.101 - It seems to make ESP32 device connections more stable and consistant to your Router and Home Assistant/MQTT Broker.
+
 Whenever you open the Arduino IDE app it will ask to update libraries etc. **DO NOT UPDATE** unless you want to potentially bugfix code due to new bugs/function changes etc. You can google how to disable auto updates in Arduino IDE etc...
 
 If modifying Arduino Library files, do so with Arduino IDE software closed and then before opening the Arduino IDE software again, clear out your C:\Windows\Temp and C:\Users\Your Username\AppData\Local\Temp directory as on Windows machines anyway, thats where all the Arduino temp files are located and we want to make sure that a rebuild of the libraries is enforced so you know 100% your changes applied and were ok.
