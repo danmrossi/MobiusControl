@@ -3,7 +3,7 @@
 Control *2x Ecotech Marine MOBIUS BLE Devices to enable "Feed Mode" - Code has been tested and works (at least for me :P) on Expressif ESP32-WROOM-32 and ESP32S3 modules to Control the Feed Mode for 2x Vortech MP60's inside of Home Assistant via MQTT. Will work on other ESP Based Modules however may require changes to the code.
 
 
-*Optimised the code in the ESP32_MobiusBLE Library to Connect to 2 devices reliably, I modified these two files in "ESP32_MobiusBLE\src\" - MobiusDevice.cpp and MobiusDevice.h - MobiusDevice.cpp - Line 462/463 and MobiusDevice.h - Line 58 - The "expectedCount" = area. I have included the Original, Unmodifed code (ESP32_MobiusBLE(Original-Unmodified).zip
+*Optimised the code in the ESP32_MobiusBLE Library to Connect to 2 devices reliably, I modified these two files in "Libraries\ESP32_MobiusBLE\src\" - MobiusDevice.cpp and MobiusDevice.h - MobiusDevice.cpp - Line 462/463 and MobiusDevice.h - Line 58 - The "expectedCount" = area. I have included the Original, Unmodifed code (ESP32_MobiusBLE(Original-Unmodified) folder.
 
 This code should work with other "Mobius" enabled devices but you will have to play with the code to suit. What i am providing is everything i used to get it to do WHAT I WANT and to give you a decent starting point which is more than i had lol :P 
 
@@ -26,11 +26,11 @@ MobiusControl-v2.ino - "The Sketch i am using myself" - Connects to 2 devices (O
 
 ***STEP-4:*** In Arduino IDE, Go to Tools > Board > Boards Manager - For Type - Select All and then in the "Filter your search" section type in esp32. You should see "esp32 by Expressif Systems" - Choose from the version drop-down list v2.0.17 and click on INSTALL - THIS IS IMPORTANT as this code has issues compiling with v3.0/3.0.1 or higher.
 
-***STEP-5:*** Extract Libraries.zip contents into your Documents\Arduino\Libraries directory - (If you are on a WINDOWS PC) or wherever the equivalent is on a Mac/Linux... **NOTE:** Replace the ArduinoJson folder in Libraries.zip contents with the one from ArduinoJson(Original-Unmodified).zip if using the sketch as is. If you have an issue compiling due to ArduinoJson.h saying it is "missing" - Try moving the #include <ArduinoJson.h> line further up the list and run a Verify/Compile each time and move up again until it works. 
+***STEP-5:*** Extract Libraries.zip contents into your Documents\Arduino\Libraries directory - (If you are on a WINDOWS PC) or wherever the equivalent is on a Mac/Linux... **NOTE:** Replace the ArduinoJson folder in libraries folder contents with the one from ArduinoJson(Original-Unmodified) if using the sketch as is. If you have an issue compiling due to ArduinoJson.h saying it is "missing" - Try moving the #include <ArduinoJson.h> line further up the list and run a Verify/Compile each time and move up again until it works. 
 
-I quickly got frustrated and gave up so ended up editing all the files inside of ArduinoJson folder (The current ArduinoJson folder in Libraries.zip). 
+I quickly got frustrated and gave up so ended up editing all the files inside of ArduinoJson folder (The current ArduinoJson folder in the Libraries directory. 
 
-To modify the files to suit your location - find/replace on each file - Replace C:\Users\Daniel Rossi\Documents\Arduino\libraries\ with your equivalent on all files that find/replace finds C:\Users\Daniel Rossi\Documents\Arduino\libraries\ ... If you do go down the rabbit hole of modifying all the ArduinoJson files then change the code in the Sketch from #include <ArduinoJson.h> to (for example) #include "C:\\Users\\Daniel Rossi\\Documents\\Arduino\\libraries\\ArduinoJson\\ArduinoJson.h"
+To modify the files to suit your location - find/replace on each file (on my version of ArduinoJson in the Libraries directory) - Replace C:\Users\Daniel Rossi\Documents\Arduino\libraries\ with your equivalent on all files that find/replace finds C:\Users\Daniel Rossi\Documents\Arduino\libraries\ ... If you do go down the rabbit hole of modifying all the ArduinoJson files then change the code in the Sketch from #include <ArduinoJson.h> to (for example) #include "C:\\Users\\Daniel Rossi\\Documents\\Arduino\\libraries\\ArduinoJson\\ArduinoJson.h"
 
 ***STEP-6:*** Copy the MobiusControl.ino file to Documents\Arduino directory - (If you are on a WINDOWS PC) or wherever the equivalent is on a Mac/Linux...
 
