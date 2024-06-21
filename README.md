@@ -32,7 +32,15 @@ This code should work with other "Mobius" enabled devices but you will have to p
        left / Keeps WiFi Alive) and when it hits zero it then turns "Feed Mode" off. I did it this way as the devices have a hissy fit if you try to turn "Feed Mode" off after the pumps already have themselves***
 * **Publishes a MQTT ESP32 Restart switch**
   * ***This is so i can script in Home Assistant the ability to periodically reboot the ESP32 Module***
-* **Includes ***ALOT*** of fail-safes to cover scenarios i ran into over time**     
+* **Includes ***ALOT*** of fail-safes to cover scenarios i ran into over time**
+
+I have added copies of my buttons/layout for Home Assistant / Pictures of Scripts (Supplied as pictures as the Hashes for device etc differ from my instance to yours) and entries to add to your configuration.yaml
+
+To use the above buttons/layout you will need (if you do not have already) 
+* https://hacs.xyz/
+* https://github.com/custom-cards/button-card
+* https://github.com/thomasloven/lovelace-card-mod
+* https://github.com/pilotak/homeassistant-attributes
 
 
 ## Instructions (What i used with code working as-is)
