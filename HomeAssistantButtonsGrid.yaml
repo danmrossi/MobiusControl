@@ -1,0 +1,323 @@
+square: false
+type: grid
+title: MP60 Control
+cards:
+  - type: custom:button-card
+    show_name: true
+    show_icon: true
+    styles:
+      card:
+        - background-color: '#01143c'
+        - font-size: 15px
+      icon:
+        - width: 24px
+        - height: 30px
+        - color: white
+      state:
+        - font-size: 15px
+      name:
+        - color: white
+      custom_fields:
+        operation_status:
+          - font-size: 15px
+          - color: var(--operation-status-color)
+    icon: mdi:shaker
+    tap_action:
+      action: call-service
+      confirmation: You want to TOGGLE Feed Mode?
+      service: >
+        [[[ return states['switch.esp32_mc_feed_mode'].state === 'on' ?
+        'script.turn_off_esp32_mc_feed_mode' :
+        'script.turn_on_esp32_mc_feed_mode' ]]]
+      data: {}
+    entity: switch.esp32_mc_feed_mode
+    show_state: true
+    name: F Mode
+    card_mod:
+      style: |
+        ha-card {
+          background: none;
+          border: none;
+        }
+    state:
+      - value: 'on'
+        styles:
+          state:
+            - color: lime
+      - value: 'off'
+        styles:
+          state:
+            - color: red
+              animation:
+                - blink 2s linear infinite
+      - value: unavailable
+        styles:
+          state:
+            - color: red
+              animation:
+                - blink 2s linear infinite
+    custom_fields:
+      operation_status:
+        card:
+          type: custom:button-card
+          show_name: false
+          show_icon: false
+          entity: sensor.esp32_mc_fm_status
+          state:
+            - value: Success
+              styles:
+                card:
+                  - background-color: green
+            - value: Failed
+              styles:
+                card:
+                  - background-color: red
+            - value: unavailable
+              styles:
+                card:
+                  - background-color: red
+  - type: custom:button-card
+    show_name: true
+    show_icon: true
+    styles:
+      card:
+        - background-color: '#01143c'
+        - font-size: 15px
+      icon:
+        - width: 24px
+        - height: 30px
+        - color: white
+      state:
+        - font-size: 15px
+      name:
+        - color: white
+      custom_fields:
+        operation_status:
+          - font-size: 15px
+          - color: var(--operation-status-color)
+    icon: mdi:information-outline
+    entity: sensor.esp32_mc_fm_status
+    show_state: true
+    name: FM Status
+    card_mod:
+      style: |
+        ha-card {
+          background: none;
+          border: none;
+        }
+    state:
+      - value: Success
+        styles:
+          state:
+            - color: lime
+      - value: Failed
+        styles:
+          state:
+            - color: red
+              animation:
+                - blink 2s linear infinite
+      - value: unavailable
+        styles:
+          state:
+            - color: red
+              animation:
+                - blink 2s linear infinite
+    custom_fields:
+      operation_status:
+        card:
+          type: custom:button-card
+          show_name: false
+          show_icon: false
+          entity: sensor.esp32_mc_fm_status
+          state:
+            - value: Success
+              styles:
+                card:
+                  - background-color: green
+            - value: Failed
+              styles:
+                card:
+                  - background-color: red
+            - value: unavailable
+              styles:
+                card:
+                  - background-color: red
+  - show_name: true
+    show_icon: true
+    type: custom:button-card
+    styles:
+      card:
+        - background-color: '#01143c'
+        - font-size: 15px
+      icon:
+        - width: 24px
+        - height: 30px
+      state:
+        - font-size: 15px
+        - color: lime
+    icon: mdi:timer-outline
+    tap_action:
+      action: more-info
+      haptic: heavy
+    icon_tap_action:
+      action: more-info
+      haptic: heavy
+    entity: sensor.esp32_mc_fm_timer
+    show_state: true
+    name: Timer
+    card_mod:
+      style: |
+        ha-card {
+          background: none;
+          border: none;
+        }
+    state:
+      - value: unavailable
+        styles:
+          state:
+            - color: red
+              animation:
+                - blink 2s linear infinite
+  - type: custom:button-card
+    show_name: true
+    show_icon: true
+    styles:
+      card:
+        - background-color: '#01143c'
+        - font-size: 15px
+      icon:
+        - width: 24px
+        - height: 30px
+        - color: white
+      state:
+        - font-size: 15px
+      name:
+        - color: white
+      custom_fields:
+        operation_status:
+          - font-size: 15px
+          - color: var(--operation-status-color)
+    icon: mdi:devices
+    entity: sensor.esp32_mc_qty_devices
+    show_state: true
+    name: '# Devices'
+    card_mod:
+      style: |
+        ha-card {
+          background: none;
+          border: none;
+        }
+    state:
+      - value: 2
+        styles:
+          state:
+            - color: lime
+      - value: 1
+        styles:
+          state:
+            - color: orange
+              animation:
+                - blink 2s linear infinite
+      - value: 0
+        styles:
+          state:
+            - color: red
+              animation:
+                - blink 2s linear infinite
+      - value: unavailable
+        styles:
+          state:
+            - color: red
+              animation:
+                - blink 2s linear infinite
+    custom_fields:
+      operation_status:
+        card:
+          type: custom:button-card
+          show_name: false
+          show_icon: false
+          entity: sensor.esp32_mc_qty_devices
+          state:
+            - value: 2
+              styles:
+                card:
+                  - background-color: green
+            - value: 1
+              styles:
+                card:
+                  - background-color: orange
+            - value: 0
+              styles:
+                card:
+                  - background-color: red
+            - value: unavailable
+              styles:
+                card:
+                  - background-color: red
+  - type: custom:button-card
+    show_name: true
+    show_icon: true
+    styles:
+      card:
+        - background-color: '#01143c'
+        - font-size: 15px
+      icon:
+        - width: 24px
+        - height: 30px
+        - color: white
+      state:
+        - font-size: 15px
+      name:
+        - color: white
+      custom_fields:
+        operation_status:
+          - font-size: 15px
+          - color: var(--operation-status-color)
+    icon: mdi:wifi
+    entity: sensor.esp32_mc_uptime
+    show_state: true
+    name: WiFi
+    card_mod:
+      style: |
+        ha-card {
+          background: none;
+          border: none;
+        }
+    state:
+      - value: Online
+        styles:
+          state:
+            - color: lime
+      - value: Offline
+        styles:
+          state:
+            - color: red
+              animation:
+                - blink 2s linear infinite
+      - value: unavailable
+        styles:
+          state:
+            - color: red
+              animation:
+                - blink 2s linear infinite
+    custom_fields:
+      operation_status:
+        card:
+          type: custom:button-card
+          show_name: false
+          show_icon: false
+          entity: sensor.esp32_mc_uptime
+          state:
+            - value: Online
+              styles:
+                card:
+                  - background-color: green
+            - value: Offline
+              styles:
+                card:
+                  - background-color: red
+            - value: unavailable
+              styles:
+                card:
+                  - background-color: red
+columns: 5
