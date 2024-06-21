@@ -25,7 +25,7 @@ static const char* LOG_TAG = "MobiusDevice";
  * Mobius devices found during scanning and stop scanning early
  * if the expected number of devices is reached.
  */
-uint8_t MobiusDevice::MobiusDeviceScanCallbacks::_expectedDevices = 0;
+uint8_t MobiusDevice::MobiusDeviceScanCallbacks::_expectedDevices = 2;
 uint8_t MobiusDevice::MobiusDeviceScanCallbacks::_foundDevices = 0;
 
 // static MobiusDevice variables
@@ -458,8 +458,8 @@ uint8_t* MobiusDevice::sendRequest(uint8_t* request, uint16_t length, uint16_t& 
         // look for a response
         bool received = false;
         ESP_LOGD(LOG_TAG, "- waiting for response");
-        // wait for at most 1 seconds, with 400 ms read/check delay
-        uint32_t oneSecond = 1000000;
+        // wait for at most 2 seconds, with 400 ms read/check delay
+        uint32_t oneSecond = 2000000;
         uint32_t readDelay =  400000;
         int64_t startMicro = esp_timer_get_time();
         while (!received && oneSecond > (esp_timer_get_time() - startMicro)) {
