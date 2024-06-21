@@ -8,11 +8,11 @@
 
 // MQTT client object with parameters for WiFi and MQTT broker
 EspMQTTClient client(
-  "EnterYourWiFiSSIDHere",
-  "EnterYourWiFiPasswordHere",
-  "homeassistant.local",
-  "MQTTBrokerUsername",
-  "MQTTBrokerPassword",
+  "YourWiFiSSIDHere",
+  "YourWiFiPasswordHere",
+  "YourHomeAssistantIPAddressHere",
+  "YourMQTTBrokerUsernameHere",
+  "YourMQTTBrokerPasswordHere",
   "Mobius",
   1883
 );
@@ -65,6 +65,20 @@ const char* jsonTimerDiscovery =  R"json({
     }
 })json";
 
+// New JSON discovery message for the restart switch
+const char* jsonRestartDiscovery =  R"json({
+    "name":"MQTT Restart",
+    "command_topic":"homeassistant/switch/restart/set",
+    "state_topic":"homeassistant/switch/restart/state",
+    "unique_id":"restartsw",
+    "device":{
+      "identifiers":[
+        "mb01"
+      ],
+      "name":"Esp32-MC"
+    }
+})json";
+
 // State variables
 bool prevState = false;
 bool currState = false;
@@ -96,6 +110,8 @@ const unsigned long reconnectInterval = 10000; // 10 seconds reconnect interval
 // Callback function when MQTT connection is established
 void onConnectionEstablished() {
   Serial.println("CONNECTED TO MQTT BROKER");
+
+  // Subscribe to the feed mode switch topic
   client.subscribe("homeassistant/switch/mb/set", [](const String& feedMode) {
     if (feedMode.length() > 0) {
       if (feedMode == "ON") {
@@ -107,7 +123,7 @@ void onConnectionEstablished() {
       }
       configPublish = false;
       if (!client.publish("homeassistant/switch/mb/state", feedMode)) {
-        Serial.printf("ERROR: DID NOT PUBLISH FEED SWITCH");
+        Serial.printf("ERROR: DID NOT PUBLISH FEED SWITCH\n");
       }
       if (feedMode == "OFF") {
         if (!client.publish("homeassistant/sensor/mb/timer", "Idle")) {
@@ -116,12 +132,22 @@ void onConnectionEstablished() {
       }
     }
   });
+
+  // Subscribe to the restart switch topic
+  client.subscribe("homeassistant/switch/restart/set", [](const String& restartCommand) {
+    Serial.printf("Restart command received: %s\n", restartCommand.c_str());
+    if (restartCommand == "ON") {
+      Serial.println("MQTT restart command received, restarting ESP32...");
+      delay(1000);  // Small delay before restarting to ensure the message is processed
+      ESP.restart();  // Restart the ESP32
+    }
+  });
 }
 
 // Ensure WiFi is connected
 void ensureWiFiConnected() {
   if (WiFi.status() != WL_CONNECTED) {
-    WiFi.begin("EnterYourWiFiSSIDHere", "EnterYourWiFiPasswordHere");
+    WiFi.begin("YourWiFiSSIDHere", "YourWiFiPasswordHere");
     WiFi.setSleep(true); // Enable WiFi modem sleep
     unsigned long startAttemptTime = millis();
     while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < 10000) {
@@ -131,7 +157,7 @@ void ensureWiFiConnected() {
     if (WiFi.status() == WL_CONNECTED) {
       Serial.println("WiFi reconnected");
     } else {
-      Serial.println("WiFi reconnection failed");
+      Serial.println("ERROR: WiFi reconnection failed after 10 seconds.");
     }
   }
 }
@@ -146,8 +172,9 @@ void ensureMQTTConnected() {
       client.loop();
       if (client.isConnected()) {
         lastReconnectAttempt = 0; // Reset the reconnect attempt counter
+        Serial.println("Reconnected to MQTT.");
       } else {
-        Serial.println("Reconnection attempt failed.");
+        Serial.println("ERROR: Reconnection attempt to MQTT failed.");
       }
     }
   }
@@ -161,6 +188,7 @@ void ensureBluetoothInitialized() {
     bluetoothInitRetries++;
     Serial.println("Reinitializing Bluetooth...");
     MobiusDevice::init(new ArduinoSerialDeviceEventListener());
+    delay(2000);  // Added delay after Bluetooth initialization
   } else {
     bluetoothInitRetries = 0; // Reset retry counter if devices are found
   }
@@ -168,6 +196,7 @@ void ensureBluetoothInitialized() {
 
 // Scan for devices with a retry mechanism
 void scanForDevices() {
+  delay(1000);  // Delay before scanning
   int retries = 3;
   deviceCount = 0;
   for (int i = 0; i < retries; i++) {
@@ -178,23 +207,32 @@ void scanForDevices() {
   }
   Serial.printf("INFO: MOBIUS BLE DEVICES FOUND: %i\n", deviceCount);
   ensureBluetoothInitialized(); // Reinitialize Bluetooth if no devices found
+  if (deviceCount == 0) {
+    Serial.println("ERROR: No Mobius BLE devices found after scanning.");
+  }
+  delay(1000);  // Delay after scanning
 }
 
 // Publish configuration messages to MQTT
 void publishConfigs() {
+  delay(1000);  // Delay before publishing configs
   if (!client.publish("homeassistant/switch/mb/config", jsonSwitchDiscovery)) {
-    Serial.printf("ERROR: DID NOT PUBLISH SWITCH CONFIG");
+    Serial.printf("ERROR: DID NOT PUBLISH SWITCH CONFIG\n");
   }
   if (!client.publish("homeassistant/sensor/mb/config", jsonSensorDiscovery)) {
-    Serial.printf("ERROR: DID NOT PUBLISH SENSOR CONFIG");
+    Serial.printf("ERROR: DID NOT PUBLISH SENSOR CONFIG\n");
   }
   if (!client.publish("homeassistant/sensor/mb/status/config", jsonStatusDiscovery)) {
-    Serial.printf("ERROR: DID NOT PUBLISH STATUS CONFIG");
+    Serial.printf("ERROR: DID NOT PUBLISH STATUS CONFIG\n");
   }
   if (!client.publish("homeassistant/sensor/mb/timer/config", jsonTimerDiscovery)) {
-    Serial.printf("ERROR: DID NOT PUBLISH TIMER CONFIG");
+    Serial.printf("ERROR: DID NOT PUBLISH TIMER CONFIG\n");
+  }
+  if (!client.publish("homeassistant/switch/restart/config", jsonRestartDiscovery)) {
+    Serial.printf("ERROR: DID NOT PUBLISH RESTART SWITCH CONFIG\n");
   }
   configPublish = true;
+  delay(1000);  // Delay after publishing configs
 }
 
 // Update device state
@@ -202,8 +240,10 @@ bool updateDeviceState(MobiusDevice& device) {
   const int maxRetries = 3;
   for (int i = 0; i < maxRetries; i++) {
     Serial.println("Starting connection to the device");
+    delay(1000);  // Delay before each connection attempt
     if (device.connect()) {
       Serial.println("Successfully connected to the device");
+      delay(1000);  // Delay after connecting
       uint16_t sceneId = device.getCurrentScene();
       Serial.printf("INFO: SCENE ID FOR DEVICE: %u\n", sceneId);
 
@@ -213,12 +253,14 @@ bool updateDeviceState(MobiusDevice& device) {
         device.runSchedule();
       }
 
+      delay(1000);  // Delay before disconnecting
       device.disconnect();
       Serial.println("Successfully disconnected from the device");
+      delay(1000);  // Delay after disconnecting
       return true;
     } else {
-      Serial.printf("ERROR: FAILED TO CONNECT TO DEVICE (Try %i)\n", i);
-      delay(1000); // Wait for a second before retrying
+      Serial.printf("ERROR: FAILED TO CONNECT TO DEVICE (Try %i)\n", i + 1);
+      delay(3000); // Increased delay before retrying (3 seconds)
     }
   }
   Serial.println("ERROR: EXCEEDED MAX RETRIES FOR DEVICE CONNECTION");
@@ -233,6 +275,7 @@ bool publishWithRetry(const char* topic, const char* payload, int retries = 3) {
     }
     delay(1000);  // Wait for a second before retrying
   }
+  Serial.printf("ERROR: FAILED TO PUBLISH MESSAGE TO TOPIC: %s AFTER %d RETRIES\n", topic, retries);
   return false;
 }
 
@@ -252,6 +295,7 @@ void setup() {
 
   MobiusDevice::init(new ArduinoSerialDeviceEventListener());
   Serial.println("SETUP RUN");
+  delay(2000);  // Delay at the end of setup
 }
 
 void loop() {
@@ -266,7 +310,7 @@ void loop() {
       currState = false;
       feedModeStartMillis = 0;  // Reset the timer
       if (!client.publish("homeassistant/switch/mb/state", "OFF")) {
-        Serial.printf("ERROR: DID NOT PUBLISH FEED SWITCH OFF");
+        Serial.printf("ERROR: DID NOT PUBLISH FEED SWITCH OFF\n");
       }
       if (!client.publish("homeassistant/sensor/mb/timer", "Idle")) {
         Serial.printf("ERROR: DID NOT PUBLISH TIMER STATUS\n");
