@@ -1,0 +1,21 @@
+command_line:
+  - binary_sensor:
+      name: esp32-mc-ping-status
+      command: 'ping -c 6 YourESP32DeviceIPAddressHere > /dev/null 2>&1 && echo success || echo fail'
+      device_class: connectivity
+      payload_on: "success"
+      payload_off: "fail"
+      scan_interval: 30
+      unique_id: 79995d26-cc3c-4f43-af73-0a896d3b2f61
+
+sensor:
+  - platform: template
+    sensors:
+      esp32_mc_uptime:
+        friendly_name: "ESP32-MC Ping Status"
+        value_template: >
+          {% if is_state('binary_sensor.esp32_mc_ping_status', 'on') %}
+            Online
+          {% else %}
+            Offline
+          {% endif %}
