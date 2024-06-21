@@ -10,9 +10,28 @@ This code should work with other "Mobius" enabled devices but you will have to p
 ***NOTES:***
 
 
-MobiusControl-v1.ino - "Basic Sketch" - Connects to 1 / 2 devices, Publishes a "Feed Mode" switch, a Sensor "QTY Devices" - The number of Mobius Devices detected and another Sensor caled "FM Status" - To report wether or not turning "Feed Mode" was successful or not. Includes some basic fail safes.
+MobiusControl-v1.ino - "Basic Sketch" 
+* Connects to 1 / 2 devices
+* Publishes a MQTT On/Off "Feed Mode" switch
+* Publishes a MQTT Sensor "QTY Devices"
+  * (The number of Mobius Devices detected)
+* Publishes a MQTT Sensor caled "FM Status"
+  * (To report wether or not turning "Feed Mode" was successful or not)
+* Includes some basic rudimentary fail safes
 
-MobiusControl-v2.ino - "The Sketch i am using myself" - Connects to 2 devices (Only have 2 to test with), Publishes a "Feed Mode" switch, a Sensor "QTY Devices" - The number of Mobius Devices detected, another Sensor caled "FM Status" - To report wether or not turning "Feed Mode" was successful or not and another sensor called "FM Timer" - As in my Mobius app, for my situation/fish requirements etc, i have created a 18hr feed scene so that all food is eaten before the pumps turn on and blow it around. When "Feed Mode" is turned on, it counts down from 17hrs 58mins (lets me know how much time is left / Keeps WiFi Alive) and when it hits zero it then turns "Feed Mode" off. I did it this way as the devices have a hissy fit if you try to turn "Feed Mode" off after the pumps already have themselves.
+MobiusControl-v2.ino - "The Sketch i am using myself" - Continually improving upon... - 
+* Connects to 2 devices
+  * (Only have 2 to test with)
+* Publishes a MQTT On/Off "Feed Mode" switch
+* Publishes a MQTT Sensor "QTY Devices"
+  * (The number of Mobius Devices detected)
+* Publishes a MQTT Sensor caled "FM Status"
+  * (To report wether or not turning "Feed Mode" was successful or not)
+* Publishes a MQTT Sensor called "FM Timer"
+  * (As in my Mobius app, for my situation/fish requirements etc, i have created a 18hr feed scene so that all food is eaten before the pumps turn on and blow it around. When "Feed Mode" is turned on, it counts down from 17hrs 58mins (lets me know how much time is left      / Keeps WiFi Alive) and when it hits zero it then turns "Feed Mode" off. I did it this way as the devices have a hissy fit if you try to turn "Feed Mode" off after the pumps already have themselves)
+* Publishes a MQTT ESP32 Restart switch
+  * (This is so i can script in Home Assistant the ability to periodically reboot the ESP32 Module)
+* Includes ALOT of fail-safes to cover scenarios i ran into over time     
 
 
 ## Instructions (What i used with code working as-is)
