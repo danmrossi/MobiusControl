@@ -203,7 +203,7 @@ void scanForDevices() {
     int tempDeviceCount = MobiusDevice::scanForMobiusDevices(scanInterval / 1000, deviceBuffer, 30);
     deviceCount = max(deviceCount, tempDeviceCount);
     if (deviceCount > 0) break;
-    delay(1000);
+    delay(2000);
   }
   Serial.printf("INFO: MOBIUS BLE DEVICES FOUND: %i\n", deviceCount);
   ensureBluetoothInitialized(); // Reinitialize Bluetooth if no devices found
