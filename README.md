@@ -19,7 +19,7 @@ This code should work with other "Mobius" enabled devices but you will have to p
   * ***To report wether or not turning "Feed Mode" was successful or not***
 * **Includes some basic rudimentary fail safes**
 
-## MobiusControl-v2.ino - "The Sketch i am using myself" - Continually improving upon... - 
+## MobiusControl-v2.ino - "The Sketch i am using myself" - Continually improving upon
 * **Connects to 2 devices**
   * ***Only have 2 to test with***
 * **Publishes a MQTT On/Off "Feed Mode" switch**
