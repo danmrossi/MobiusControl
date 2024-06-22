@@ -458,9 +458,9 @@ uint8_t* MobiusDevice::sendRequest(uint8_t* request, uint16_t length, uint16_t& 
         // look for a response
         bool received = false;
         ESP_LOGD(LOG_TAG, "- waiting for response");
-        // wait for at most 2 seconds, with 400 ms read/check delay
+        // wait for at most 2 seconds, with 600 ms read/check delay
         uint32_t oneSecond = 2000000;
-        uint32_t readDelay =  400000;
+        uint32_t readDelay =  600000;
         int64_t startMicro = esp_timer_get_time();
         while (!received && oneSecond > (esp_timer_get_time() - startMicro)) {
             // busy wait to avoid flooding with read requests and constant locking
