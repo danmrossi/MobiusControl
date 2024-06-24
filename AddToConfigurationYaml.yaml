@@ -6,7 +6,7 @@ command_line:
       payload_on: "success"
       payload_off: "fail"
       scan_interval: 30
-      unique_id: 79995d26-cc3c-4f43-af73-0a896d3b2f61
+      unique_id: 64beaab7-edf2-44f9-abfb-415d725b0003
 
 sensor:
   - platform: template
