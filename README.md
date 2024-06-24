@@ -43,7 +43,7 @@ To use the above buttons/layout you will need (if you do not have already)
 * https://github.com/pilotak/homeassistant-attributes
 
 
-## Instructions (What i used with code working as-is)
+# Instructions (What i used with code working as-is)
 
 
 ***STEP-1:*** Install Arduino IDE v2.3.2 (Windows\Mac\Linux): https://www.arduino.cc/en/software or https://github.com/arduino/arduino-ide/releases/tag/2.3.2
@@ -65,7 +65,7 @@ To modify the files to suit your location - find/replace on each file (on my ver
 ***STEP-7:*** For MobiusControl-v1.ino - Edit the following lines in Arduino IDE with your values - Lines: 10 / 11 / 12 / 13 / 14 / 15 / 16 & 107 - For MobiusControl-v2.ino - Edit the following lines in Arduino IDE with your values - Lines: 10 / 11 / 12 / 13 / 14 / 15 / 16 & 124
 
 
-***TROUBLESHOOTING:*** 
+# TROUBLESHOOTING: 
 
 
 If you are having random issues with Bluetooth connectivity, Set the 2.4ghz WiFi Channel on your Router to Channel 1. This prevents any WiFi Channel overlap with the Mobius Device / ESP32 Bluetooth module signals. 
