@@ -7,7 +7,7 @@ Control *2x Ecotech Marine MOBIUS BLE Devices to enable "Feed Mode" - Code has b
 
 This code should work with other "Mobius" enabled devices but you will have to play with the code to suit. What i am providing is everything i used to get it to do WHAT I WANT and to give you a decent starting point which is more than i had lol :P 
 
-***NOTES:***
+# NOTES:
 
 
 ## MobiusControl-v1.ino - "Basic Sketch" 
