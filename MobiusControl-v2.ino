@@ -122,11 +122,11 @@ void onConnectionEstablished() {
         feedModeStartMillis = 0;  // Reset the start time
       }
       configPublish = false;
-      if (!client.publish("homeassistant/switch/mb/state", feedMode)) {
+      if (!client.publish("homeassistant/switch/mb/state", feedMode, true)) {
         Serial.printf("ERROR: DID NOT PUBLISH FEED SWITCH\n");
       }
       if (feedMode == "OFF") {
-        if (!client.publish("homeassistant/sensor/mb/timer", "Idle")) {
+        if (!client.publish("homeassistant/sensor/mb/timer", "Idle", true)) {
           Serial.printf("ERROR: DID NOT PUBLISH TIMER STATUS\n");
         }
       }
@@ -147,7 +147,7 @@ void onConnectionEstablished() {
 // Ensure WiFi is connected
 void ensureWiFiConnected() {
   if (WiFi.status() != WL_CONNECTED) {
-    WiFi.begin("YourWiFiSSIDHere", "YourWiFiPasswordHere");
+    WiFi.begin("HomeWireless-2.4", "Pc265jess4@");
     WiFi.setSleep(true); // Enable WiFi modem sleep
     unsigned long startAttemptTime = millis();
     while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < 10000) {
@@ -216,19 +216,19 @@ void scanForDevices() {
 // Publish configuration messages to MQTT
 void publishConfigs() {
   delay(1000);  // Delay before publishing configs
-  if (!client.publish("homeassistant/switch/mb/config", jsonSwitchDiscovery)) {
+  if (!client.publish("homeassistant/switch/mb/config", jsonSwitchDiscovery, true)) {
     Serial.printf("ERROR: DID NOT PUBLISH SWITCH CONFIG\n");
   }
-  if (!client.publish("homeassistant/sensor/mb/config", jsonSensorDiscovery)) {
+  if (!client.publish("homeassistant/sensor/mb/config", jsonSensorDiscovery, true)) {
     Serial.printf("ERROR: DID NOT PUBLISH SENSOR CONFIG\n");
   }
-  if (!client.publish("homeassistant/sensor/mb/status/config", jsonStatusDiscovery)) {
+  if (!client.publish("homeassistant/sensor/mb/status/config", jsonStatusDiscovery, true)) {
     Serial.printf("ERROR: DID NOT PUBLISH STATUS CONFIG\n");
   }
-  if (!client.publish("homeassistant/sensor/mb/timer/config", jsonTimerDiscovery)) {
+  if (!client.publish("homeassistant/sensor/mb/timer/config", jsonTimerDiscovery, true)) {
     Serial.printf("ERROR: DID NOT PUBLISH TIMER CONFIG\n");
   }
-  if (!client.publish("homeassistant/switch/restart/config", jsonRestartDiscovery)) {
+  if (!client.publish("homeassistant/switch/restart/config", jsonRestartDiscovery, true)) {
     Serial.printf("ERROR: DID NOT PUBLISH RESTART SWITCH CONFIG\n");
   }
   configPublish = true;
@@ -268,9 +268,9 @@ bool updateDeviceState(MobiusDevice& device) {
 }
 
 // Publish MQTT message with retry mechanism
-bool publishWithRetry(const char* topic, const char* payload, int retries = 3) {
+bool publishWithRetry(const char* topic, const char* payload, bool retain = false, int retries = 3) {
   for (int i = 0; i < retries; i++) {
-    if (client.publish(topic, payload)) {
+    if (client.publish(topic, payload, retain)) {
       return true;
     }
     delay(1000);  // Wait for a second before retrying
@@ -309,10 +309,10 @@ void loop() {
     if (elapsedMillis >= feedModeDuration) {
       currState = false;
       feedModeStartMillis = 0;  // Reset the timer
-      if (!client.publish("homeassistant/switch/mb/state", "OFF")) {
+      if (!client.publish("homeassistant/switch/mb/state", "OFF", true)) {
         Serial.printf("ERROR: DID NOT PUBLISH FEED SWITCH OFF\n");
       }
-      if (!client.publish("homeassistant/sensor/mb/timer", "Idle")) {
+      if (!client.publish("homeassistant/sensor/mb/timer", "Idle", true)) {
         Serial.printf("ERROR: DID NOT PUBLISH TIMER STATUS\n");
       }
     } else {
@@ -322,7 +322,7 @@ void loop() {
       unsigned long seconds = (remainingMillis % 60000) / 1000;
       char timerStatus[50];
       snprintf(timerStatus, sizeof(timerStatus), "%lu:%02lu:%02lu", hours, minutes, seconds);
-      client.publish("homeassistant/sensor/mb/timer", timerStatus);
+      client.publish("homeassistant/sensor/mb/timer", timerStatus, true);
     }
   }
 
@@ -361,7 +361,7 @@ void loop() {
         StaticJsonDocument<100> jsonQtyDev;
         jsonQtyDev["qtydevices"] = deviceCount;
         serializeJson(jsonQtyDev, cstr, sizeof(cstr));
-        if (!publishWithRetry("homeassistant/sensor/mb/state", cstr)) {
+        if (!publishWithRetry("homeassistant/sensor/mb/state", cstr, true)) {
           Serial.printf("ERROR: DID NOT PUBLISH DEVICE QUANTITY\n");
         }
 
@@ -376,7 +376,7 @@ void loop() {
           unsigned long seconds = (remainingMillis % 60000) / 1000;
           char timerStatus[50];
           snprintf(timerStatus, sizeof(timerStatus), "%lu:%02lu:%02lu", hours, minutes, seconds);
-          if (!client.publish("homeassistant/sensor/mb/timer", timerStatus)) {
+          if (!client.publish("homeassistant/sensor/mb/timer", timerStatus, true)) {
             Serial.printf("ERROR: DID NOT PUBLISH TIMER STATUS\n");
           }
         } else {
@@ -394,7 +394,7 @@ void loop() {
         currentDeviceIndex++;
         if (currentDeviceIndex >= deviceCount) {
           const char* statusStr = success ? "Success" : "Failed";
-          if (!publishWithRetry("homeassistant/sensor/mb/status", statusStr)) {
+          if (!publishWithRetry("homeassistant/sensor/mb/status", statusStr, true)) {
             Serial.printf("ERROR: DID NOT PUBLISH STATUS\n");
           }
           currentState = IDLE;
