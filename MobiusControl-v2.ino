@@ -148,7 +148,6 @@ void onConnectionEstablished() {
 void ensureWiFiConnected() {
   if (WiFi.status() != WL_CONNECTED) {
     WiFi.begin("HomeWireless-2.4", "Pc265jess4@");
-    WiFi.setSleep(true); // Enable WiFi modem sleep
     unsigned long startAttemptTime = millis();
     while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < 10000) {
       delay(500);
@@ -305,7 +304,7 @@ void loop() {
 
   // Update timer status if feed mode is active
   if (currState && feedModeStartMillis > 0) {
-    unsigned long elapsedMillis = millis() - feedModeStartMillis;
+    unsigned long elapsedMillis = (millis() - feedModeStartMillis) % feedModeDuration;
     if (elapsedMillis >= feedModeDuration) {
       currState = false;
       feedModeStartMillis = 0;  // Reset the timer
