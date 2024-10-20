@@ -32,7 +32,7 @@ This code should work with other "Mobius" enabled devices but you will have to p
 * Publishes a MQTT ESP32 Restart switch
   * ***This is so i can script in Home Assistant the ability to periodically reboot the ESP32 Module***
 * Includes ALOT of fail-safes to cover scenarios i ran into over time
-* **October 2024:** Includes the MQTT Retain ability so when you reboot Home Assistant it does not lose track of the last state, Fixed issue with "Millis" - Enhanced the timer logic to avoid overflow issues by switching to modular arithmetic, which ensures correct timer behavior even if the millis() function overflows every 50 days
+* **October 2024:** Includes the MQTT Retain ability so when you reboot Home Assistant it does not lose track of the last state
 
 I have added copies of my buttons/layout for Home Assistant / Pictures of Scripts (Supplied as pictures as the Hashes for device etc differ from my instance to yours) and entries to add to your configuration.yaml
 

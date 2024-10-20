@@ -2,17 +2,16 @@
 #include "ArduinoSerialDeviceEventListener.h"
 #include "EspMQTTClient.h"
 #include <WiFi.h>
-#include <esp_bt.h>
 #include <string>
 #include <ArduinoJson.h>
 
 // MQTT client object with parameters for WiFi and MQTT broker
 EspMQTTClient client(
-  "YourWiFiSSIDHere",
-  "YourWiFiPasswordHere",
-  "YourHomeAssistantIPAddressHere",
-  "YourMQTTBrokerUsernameHere",
-  "YourMQTTBrokerPasswordHere",
+  "EnterYourWifiSSIDHere",
+  "EnterYourWiFiPasswordHere",
+  "homeassistant.local",
+  "MQTTBrokerUsername",
+  "MQTTBrokerPassword",
   "Mobius",
   1883
 );
@@ -148,6 +147,7 @@ void onConnectionEstablished() {
 void ensureWiFiConnected() {
   if (WiFi.status() != WL_CONNECTED) {
     WiFi.begin("HomeWireless-2.4", "Pc265jess4@");
+    WiFi.setSleep(true); // Enable WiFi modem sleep
     unsigned long startAttemptTime = millis();
     while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < 10000) {
       delay(500);
@@ -304,7 +304,7 @@ void loop() {
 
   // Update timer status if feed mode is active
   if (currState && feedModeStartMillis > 0) {
-    unsigned long elapsedMillis = (millis() - feedModeStartMillis) % feedModeDuration;
+    unsigned long elapsedMillis = millis() - feedModeStartMillis;
     if (elapsedMillis >= feedModeDuration) {
       currState = false;
       feedModeStartMillis = 0;  // Reset the timer
@@ -379,7 +379,7 @@ void loop() {
             Serial.printf("ERROR: DID NOT PUBLISH TIMER STATUS\n");
           }
         } else {
-          if (!client.publish("homeassistant/sensor/mb/timer", "Idle")) {
+          if (!client.publish("homeassistant/sensor/mb/timer", "Idle", true)) {
             Serial.printf("ERROR: DID NOT PUBLISH TIMER STATUS\n");
           }
         }
